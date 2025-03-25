@@ -1,0 +1,24 @@
+2025-03-26 03:14:13,947 - INFO: Starting news scrape at 2025-03-26 03:14:13
+2025-03-26 03:14:13,977 - WARNING:  * Debugger is active!
+2025-03-26 03:14:13,981 - INFO:  * Debugger PIN: 794-134-037
+2025-03-26 03:14:14,792 - ERROR: Error scraping article https://www.prothomalo.com/api/auth/v1/oauth/authorize?client_id=811&response_type=code&redirect_uri=/api/auth/v1/oauth/token&callback_uri=/: 400 Client Error: Bad Request for url: https://www.prothomalo.com/api/auth/v1/oauth/authorize?client_id=811&response_type=code&redirect_uri=/api/auth/v1/oauth/token&callback_uri=/
+2025-03-26 03:14:14,871 - INFO: 192.168.0.102 - - [26/Mar/2025 03:14:14] "GET /api/news/stream HTTP/1.1" 200 -
+2025-03-26 03:14:14,876 - INFO: 192.168.0.102 - - [26/Mar/2025 03:14:14] "GET / HTTP/1.1" 200 -
+2025-03-26 03:14:15,054 - INFO: 192.168.0.102 - - [26/Mar/2025 03:14:15] "GET /api/news HTTP/1.1" 200 -
+2025-03-26 03:14:15,429 - ERROR: Error scraping https://www.prothomalo.com/all-news: 404 Client Error: Not Found for url: https://www.prothomalo.com/all-news
+2025-03-26 03:14:15,429 - INFO: Scraped 3 new articles
+2025-03-26 03:14:45,041 - INFO: 192.168.0.102 - - [26/Mar/2025 03:14:45] "GET /api/news/stream HTTP/1.1" 200 -
+2025-03-26 03:17:09,423 - INFO:  * Detected change in 'D:\\Work\\news_flask\\app.py', reloading
+2025-03-26 03:17:19,029 - INFO: 
+[2025-03-26 03:17:19] Starting news scrape...
+2025-03-26 03:17:19,062 - WARNING:  * Debugger is active!
+2025-03-26 03:17:19,070 - INFO:  * Debugger PIN: 794-134-037
+2025-03-26 03:17:20,111 - INFO: 192.168.0.102 - - [26/Mar/2025 03:17:20] "GET /api/news/stream HTTP/1.1" 200 -
+2025-03-26 03:17:20,117 - INFO: 192.168.0.102 - - [26/Mar/2025 03:17:20] "GET / HTTP/1.1" 200 -
+2025-03-26 03:17:20,191 - INFO: 192.168.0.102 - - [26/Mar/2025 03:17:20] "GET /api/news HTTP/1.1" 200 -
+2025-03-26 03:17:20,703 - ERROR: Error scraping article https://www.prothomalo.com/api/auth/v1/oauth/authorize?client_id=811&response_type=code&redirect_uri=/api/auth/v1/oauth/token&callback_uri=/: 400 Client Error: Bad Request for url: https://www.prothomalo.com/api/auth/v1/oauth/authorize?client_id=811&response_type=code&redirect_uri=/api/auth/v1/oauth/token&callback_uri=/
+2025-03-26 03:17:50,178 - INFO: 192.168.0.102 - - [26/Mar/2025 03:17:50] "GET /api/news/stream HTTP/1.1" 200 -
+2025-03-26 03:19:00,939 - INFO: 127.0.0.1 - - [26/Mar/2025 03:19:00] "GET / HTTP/1.1" 200 -
+2025-03-26 03:19:01,404 - INFO: 127.0.0.1 - - [26/Mar/2025 03:19:01] "GET /api/news HTTP/1.1" 200 -
+2025-03-26 03:19:31,180 - INFO: 127.0.0.1 - - [26/Mar/2025 03:19:31] "GET /api/news/stream HTTP/1.1" 200 -
+2025-03-26 03:19:35,927 - INFO:  * Detected change in 'D:\\Work\\news_flask\\app.py', reloading

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রথম আলো সংবাদ সংক্ষিপ্ত</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --secondary-color: #b71c1c;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --card-background: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: var(--card-background);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .news-card {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .news-card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .news-card-content {
+            padding: 20px;
+        }
+
+        .news-card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .news-card-summary {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .news-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 20px;
+        }
+
+        .category-tag {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .read-more {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: var(--secondary-color);
+        }
+
+        #loading, #error {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.2em;
+        }
+
+        #error {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>প্রথম আলো সংবাদ সংক্ষিপ্ত</h1>
+        </div>
+
+        <div class="category-tabs" id="category-tabs">
+            <button class="category-tab active" data-category="all">সকল সংবাদ</button>
+            <button class="category-tab" data-category="bangladesh">বাংলাদেশ</button>
+            <button class="category-tab" data-category="world">আন্তর্জাতিক</button>
+            <button class="category-tab" data-category="economy">অর্থনীতি</button>
+            <button class="category-tab" data-category="sports">খেলা</button>
+            <button class="category-tab" data-category="entertainment">বিনোদন</button>
+        </div>
+
+        <div id="loading">লোড হচ্ছে...</div>
+        <div id="news-container" class="news-grid" style="display: none;"></div>
+        <div id="error" style="display: none;">সংবাদ লোড করতে সমস্যা হয়েছে।</div>
+    </div>
+
+    <script>
+        let allArticles = [];
+
+        async function fetchNews() {
+            const loadingIndicator = document.getElementById('loading');
+            const newsContainer = document.getElementById('news-container');
+            const errorMessage = document.getElementById('error');
+
+            try {
+                const response = await axios.get('/api/news');
+                allArticles = response.data.articles || [];
+                
+                loadingIndicator.style.display = 'none';
+                newsContainer.style.display = 'grid';
+                
+                renderArticles('all');
+            } catch (error) {
+                loadingIndicator.style.display = 'none';
+                errorMessage.style.display = 'block';
+                console.error('Error fetching news:', error);
+            }
+        }
+
+        function renderArticles(category) {
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
+
+            const filteredArticles = category === 'all' 
+                ? allArticles 
+                : allArticles.filter(article => article.category === category);
+
+            filteredArticles.forEach(article => {
+                const newsCard = document.createElement('div');
+                newsCard.classList.add('news-card');
+
+                newsCard.innerHTML = `
+                    <img src="${article.image_url}" alt="${article.title}" class="news-card-image">
+                    <div class="news-card-content">
+                        <h2 class="news-card-title">${article.title}</h2>
+                        <p class="news-card-summary">${article.summary}</p>
+                    </div>
+                    <div class="news-card-footer">
+                        <span class="category-tag">${article.category}</span>
+                        <a href="${article.article_url}" target="_blank" class="read-more">পড়ুন</a>
+                    </div>
+                `;
+                newsContainer.appendChild(newsCard);
+            });
+        }
+
+        // Category Tab Event Listeners
+        document.getElementById('category-tabs').addEventListener('click', (event) => {
+            if (event.target.classList.contains('category-tab')) {
+                // Remove active class from all tabs
+                document.querySelectorAll('.category-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Add active class to clicked tab
+                event.target.classList.add('active');
+
+                // Render articles for selected category
+                const category = event.target.getAttribute('data-category');
+                renderArticles(category);
+            }
+        });
+
+        // Initial load
+        window.onload = fetchNews;
+
+        // Optional: Real-time updates via Server-Sent Events
+        const eventSource = new EventSource('/api/news/stream');
+        eventSource.onmessage = (event) => {
+            const newArticle = JSON.parse(event.data);
+            
+            // Add to beginning of articles list
+            allArticles.unshift(newArticle);
+            
+            // Keep only latest 100 articles
+            if (allArticles.length > 100) {
+                allArticles = allArticles.slice(0, 100);
+            }
+
+            // Re-render current category
+            const activeCategory = document.querySelector('.category-tab.active').getAttribute('data-category');
+            renderArticles(activeCategory);
+        };
+    </script>
+</body>
+</html>
